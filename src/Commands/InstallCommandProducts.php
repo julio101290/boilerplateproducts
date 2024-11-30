@@ -10,7 +10,7 @@ use CodeIgniter\CLI\CLI;
 /**
  * Class InstallCommand.
  */
-class InstallCommandproducts extends BaseCommand
+class InstallCommandProducts extends BaseCommand
 {
     /**
      * The group the command is lumped under
