@@ -1,26 +1,26 @@
 <?php
 
-$categorias["logDescription"] = "La categoria ha sido guardada con los siguientes datos:";
-$categorias["logUpdate"] = "La Categoria ha sido actualizada con los siguientes datos:";
-$categorias["logDeleted"] = "La categoria ha sido eliminada y contenia los siguientes datos:";
-$categorias["msg_delete"] = "La categoria ha sido eliminada correctamente";
+$categorias["logDescription"] = "Die Kategorie wurde mit folgenden Daten gespeichert:";
+$categorias["logUpdate"] = "Die Kategorie wurde mit folgenden Daten aktualisiert:";
+$categorias["logDeleted"] = "Die Kategorie wurde gelöscht und enthielt folgende Daten:";
+$categorias["msg_delete"] = "Die Kategorie wurde erfolgreich gelöscht.";
 
-$categorias["add"] = "Agregar Categorias";
-$categorias["edit"] = "Editar Categorias";
-$categorias["createEdit"] = "Crear / Editar";
-$categorias["title"] = "Administrar categorias";
-$categorias["subtitle"] = "Lista de categorias";
-$categorias["fields"]["descripcion"] = "Descripcion";
-$categorias["fields"]["created_at"] = "Fecha Creacion";
-$categorias["fields"]["updated_at"] = "Fecha de modificacion";
-$categorias["fields"]["deleted_at"] = "Fecha de Eliminacion";
+$categorias["add"] = "Kategorien hinzufügen";
+$categorias["edit"] = "Kategorien bearbeiten";
+$categorias["createEdit"] = "Anlegen / Bearbeiten";
+$categorias["title"] = "Kategorien verwalten";
+$categorias["subtitle"] = "Kategorienliste";
+$categorias["fields"]["descripcion"] = "Beschreibung";
+$categorias["fields"]["created_at"] = "Erstellungsdatum";
+$categorias["fields"]["updated_at"] = "Änderungsdatum";
+$categorias["fields"]["deleted_at"] = "Löschdatum";
 
-$categorias["fields"]["actions"] = "Acciones";
-$categorias["msg"]["msg_insert"] = "La categoria fue agregada satisfactoriamente.";
-$categorias["msg"]["msg_update"] = "La categoria ha sido actualizada correctamente.";
-$categorias["msg"]["msg_delete"] = "La categoria ha sido eliminada correctamente.";
-$categorias["msg"]["msg_get"] = "La categoria ha sido obtenida correctamente.";
-$categorias["msg"]["msg_get_fail"] = "No se encontro la categoria o fue eliminada.";
+$categorias["fields"]["actions"] = "Aktionen";
+$categorias["msg"]["msg_insert"] = "Die Kategorie wurde erfolgreich hinzugefügt.";
+$categorias["msg"]["msg_update"] = "Die Kategorie wurde erfolgreich aktualisiert.";
+$categorias["msg"]["msg_delete"] = "Die Kategorie wurde erfolgreich gelöscht.";
+$categorias["msg"]["msg_get"] = "Die Kategorie wurde erfolgreich abgerufen.";
+$categorias["msg"]["msg_get_fail"] = "Die Kategorie wurde nicht gefunden oder wurde gelöscht.";
 
 return $categorias;
         

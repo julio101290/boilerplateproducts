@@ -7,7 +7,7 @@ $routes->group('admin', function ($routes) {
         'filter' => 'permission:categorias-permission',
         'controller' => 'categoriasController',
         'except' => 'show', 
-        ['namespace' => 'julio101290\boilerplateproducts\Controllers']
+        'namespace' => 'julio101290\boilerplateproducts\Controllers'
     ]);
 
     $routes->post('categorias/save'

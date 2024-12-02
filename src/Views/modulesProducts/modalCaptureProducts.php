@@ -66,10 +66,7 @@
 
                         </div>
 
-
                     </div>
-
-
 
                     <input type="hidden" id="idProducts" name="idProducts" value="0">
 

@@ -49,7 +49,7 @@ class CategoriasController extends BaseController
         
         $titulos["title"] = lang('categorias.title');
         $titulos["subtitle"] = lang('categorias.subtitle');
-        return view('categorias', $titulos);
+        return view('julio101290\boilerplateproducts\Views\categorias', $titulos);
     }
     /**
      * Read Categorias
