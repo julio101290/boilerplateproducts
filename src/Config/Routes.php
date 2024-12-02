@@ -3,9 +3,6 @@
 
 $routes->group('admin', function ($routes) {
 
-
-
-
     $routes->resource('categorias', [
         'filter' => 'permission:categorias-permission',
         'controller' => 'categoriasController',
@@ -35,11 +32,13 @@ $routes->group('admin', function ($routes) {
 
 
     $routes->resource('products', [
-        'filter' => 'permission:products-permission',
-        'controller' => 'productsController',
-        'except' => 'show'
+        'filter' => 'permission:products-permission'
         ,['namespace' => 'julio101290\boilerplateproducts\Controllers']
+        ,'controller' => 'productsController'
+        ,'except' => 'show'
+       
     ]);
+
     $routes->post('products/save'
     , 'ProductsController::save'
     ,['namespace' => 'julio101290\boilerplateproducts\Controllers']
@@ -80,8 +79,6 @@ $routes->group('admin', function ($routes) {
     , 'ProductsController::getProductsAjaxSelect2'
     ,['namespace' => 'julio101290\boilerplateproducts\Controllers']
     );
-
-
 
 
 });
