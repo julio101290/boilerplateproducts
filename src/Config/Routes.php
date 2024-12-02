@@ -33,9 +33,9 @@ $routes->group('admin', function ($routes) {
 
     $routes->resource('products', [
         'filter' => 'permission:products-permission'
-        ,['namespace' => 'julio101290\boilerplateproducts\Controllers']
         ,'controller' => 'productsController'
         ,'except' => 'show'
+        ,'namespace' => 'julio101290\boilerplateproducts\Controllers'
        
     ]);
 

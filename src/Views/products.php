@@ -1,4 +1,4 @@
-<?= $this->include('load/toggle') ?>
+<?= $this->include('julio101290\boilerplate\Views\load/toggle') ?>
 <?= $this->include('julio101290\boilerplate\Views\load\select2') ?>
 <?= $this->include('julio101290\boilerplate\Views\load\datatables') ?>
 <?= $this->include('julio101290\boilerplate\Views\load\nestable') ?>
@@ -8,7 +8,7 @@
 <!-- Section content -->
 <?= $this->section('content') ?>
 
-<?= $this->include('modulesProducts/modalCaptureProducts') ?>
+<?= $this->include('julio101290\boilerplateproducts\Views\modulesProducts/modalCaptureProducts') ?>
 
 <!-- SELECT2 EXAMPLE -->
 <div class="card card-default">

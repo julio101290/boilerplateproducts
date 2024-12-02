@@ -40,29 +40,29 @@
 
                         <div class="tab-pane fade show active" id="generalesProductos" role="tabpanel" aria-labelledby="generales">
 
-                            <?= $this->include('modulesProducts/generalsProducts') ?>
+                            <?= $this->include('julio101290\boilerplateproducts\Views/modulesProducts/generalsProducts') ?>
 
                         </div>
                         <div class="tab-pane fade" id="inventoryProducts" role="tabpanel" aria-labelledby="datosFacturacion">
 
-                            <?= $this->include('modulesProducts/inventoryProducts') ?>
+                            <?= $this->include('julio101290\boilerplateproducts\Views\modulesProducts/inventoryProducts') ?>
 
                         </div>
                         <div class="tab-pane fade" id="precios" role="tabpanel" aria-labelledby="contact-tab">
 
-                            <?= $this->include('modulesProducts/priceProducts') ?>
+                            <?= $this->include('julio101290\boilerplateproducts\Views/modulesProducts/priceProducts') ?>
 
                         </div>
 
                         <div class="tab-pane fade" id="imageProduct" role="tabpanel" aria-labelledby="contact-tab">
 
-                            <?= $this->include('modulesProducts/imageProduct') ?>
+                            <?= $this->include('julio101290\boilerplateproducts\Views/modulesProducts/imageProduct') ?>
 
                         </div>
 
                         <div class="tab-pane fade" id="productsCFDIV4" role="tabpanel" aria-labelledby="contact-tab">
 
-                            <?= $this->include('modulesProducts/productsCFDIV4') ?>
+                            <?= $this->include('julio101290\boilerplateproducts\Views/modulesProducts/productsCFDIV4') ?>
 
                         </div>
 
