@@ -1,13 +1,15 @@
-[![Latest Stable Version](https://poser.okvpn.org/julio101290/boilerplatebranchoffice/v/stable)](https://packagist.org/packages/julio101290/boilerplatebranchoffice) [![Total Downloads](https://poser.okvpn.org/julio101290/boilerplatebranchoffice/downloads)](https://packagist.org/packages/julio101290/boilerplatebranchoffice) [![Latest Unstable Version](https://poser.okvpn.org/julio101290/boilerplatebranchoffice/v/unstable)](https://packagist.org/packages/julio101290/boilerplatebranchoffice) [![License](https://poser.okvpn.org/julio101290/boilerplatebranchoffice/license)](https://packagist.org/packages/julio101290/boilerplatebranchoffice)
+[![Latest Stable Version](https://poser.okvpn.org/julio101290/boilerplateproducts/v/stable)](https://packagist.org/packages/julio101290/boilerplateproducts) [![Total Downloads](https://poser.okvpn.org/julio101290/boilerplateproducts/downloads)](https://packagist.org/packages/julio101290/boilerplateproducts) [![Latest Unstable Version](https://poser.okvpn.org/julio101290/boilerplateproducts/v/unstable)](https://packagist.org/packages/julio101290/boilerplateproducts) [![License](https://poser.okvpn.org/julio101290/boilerplateproducts/license)](https://packagist.org/packages/julio101290/boilerplateproducts)
 
 ## CodeIgniter 4 Boilerplate BranchOffice
-CodeIgniter4 Boilerplatebranchoffice CRUD MVC contain capture per companie Key,name, address, admin box
+CodeIgniter4 Boilerplateproducts CRUD MVC contain capture category and producto CRUD per companie, contain name, admin inventory, SAT Fields invoices
 
 
 ## Requirements
 * PhpCfdi\SatCatalogos
 * julio101290/boilerplatelog
 * hermawan/codeigniter4-datatables
+* julio101290/boilerplatecompanies
+* julio101290/boilerplatebranchoffice
 
 ## Installation
 
@@ -23,13 +25,17 @@ CodeIgniter4 Boilerplatebranchoffice CRUD MVC contain capture per companie Key,n
 
  	composer require julio101290/boilerplatebranchoffice
 
+   	composer require julio101290/boilerplateproducts
+
 ### Run command for migration and seeder
 
 	php spark boilerplatecompanies:installcompaniescrud
 
  	php spark boilerplatelog:installlog
 
-  	boilerplatebranchoffice:installbranchoffice
+  	php spark boilerplatebranchoffice:installbranchoffice
+
+ 	php spark boilerplateproducts:installproducts
 
  ### BaseController.php Config
 
