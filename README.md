@@ -121,15 +121,21 @@ CodeIgniter4 Boilerplateproducts CRUD MVC contain capture category and producto 
 * Download and uncompress the file https://github.com/phpcfdi/resources-sat-catalogs/releases/latest/download/catalogs.db.bz2
 * Put in the folder writable/database/catalogossat.db
 
-### Make the menu
-![image](https://github.com/user-attachments/assets/3377700f-e5bc-4317-95a4-3b800bead3e5)
+### Make the menu Category
+![image](https://github.com/user-attachments/assets/ae27afee-fe2d-4f28-9556-bde49f305105)
+
+### Make the menu Products
+![image](https://github.com/user-attachments/assets/357c23f7-a801-4ee9-8e96-6cd5ed4dcc3d)
 
 
 # Ready
 
-![image](https://github.com/user-attachments/assets/e844eb79-33a5-43e7-9809-c939b8e1028e)
+![image](https://github.com/user-attachments/assets/45bfe8be-8b4d-49bc-a1a9-8119beacb480)
+
 
 ![image](https://github.com/user-attachments/assets/02d65119-62b4-4040-984c-aae92f763c34)
+
+![image](https://github.com/user-attachments/assets/cff9b80b-742e-4c5d-8504-e1b1e543c0c2)
 
 
 Usage
