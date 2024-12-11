@@ -60,11 +60,6 @@ $routes->group('admin', function ($routes) {
     ,['namespace' => 'julio101290\boilerplateproducts\Controllers']
     );
 
-    $routes->get('products/getAllProductsInventory/(:any)/(:any)/(:any)'
-    , 'ProductsController::getAllProductsInventory/$1/$2/$3'
-    ,['namespace' => 'julio101290\boilerplateproducts\Controllers']
-    );
-
     $routes->post('products/getUnidadSATAjax'
             , 'ProductsController::getUnidadSATAjax'
             ,['namespace' => 'julio101290\boilerplateproducts\Controllers']);
