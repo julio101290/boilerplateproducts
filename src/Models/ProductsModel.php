@@ -88,7 +88,8 @@ class ProductsModel extends Model {
 
 
         $resultado2 = $this->db->table('products a, empresas b, saldos c, storages d')
-                ->select('a.id,a.code
+                ->select('a.id
+                    ,a.code
           ,a.idCategory
           ,a.validateStock
           ,a.inventarioRiguroso
@@ -110,7 +111,7 @@ class ProductsModel extends Model {
           ,a.nombreUnidadSAT
           ,a.nombreClaveProducto
           ,a.unidadSAT
-          ,c.lote as lote
+          ,ifnull(c.lote,\'\') as lote
           ,c.idAlmacen
           ,d.name as almacen
           ,a.claveProductoSAT
@@ -129,35 +130,43 @@ class ProductsModel extends Model {
                 ->whereIn('c.idEmpresa', $empresas);
 
         $resultado = $this->db->table('products a, empresas b')
-                ->select('a.id,a.code
+                ->select('a.id
+                    ,a.code
           ,a.idCategory
           ,a.validateStock
           ,a.inventarioRiguroso
+          
           ,a.description
           ,a.stock as stock
           ,a.buyPrice
           ,a.salePrice
           ,a.porcentSale
+          
           ,a.porcentTax
           ,a.routeImage
           ,a.created_at
           ,a.deleted_at
           ,a.updated_at
+          
           ,a.barcode
           ,a.unidad
           ,b.nombre as nombreEmpresa
           ,a.porcentIVARetenido
           ,a.porcentISRRetenido
+          
           ,a.nombreUnidadSAT
           ,a.nombreClaveProducto
           ,a.unidadSAT
-          ,a.inmuebleOcupado
-          ,a.tasaExcenta
-          ,a.predial
           ,\'\' as lote
+          
           , 0 as idAlmacen
           ,\'\' as almacen
-          ,a.claveProductoSAT')
+          ,a.claveProductoSAT
+          ,a.tasaExcenta
+          ,a.predial
+          ,a.inmuebleOcupado
+          
+            ')
                 ->where('a.idEmpresa', 'b.id', FALSE)
                 ->where('a.idEmpresa', $empresa)
                 ->groupStart()
@@ -172,6 +181,8 @@ class ProductsModel extends Model {
         $this->db->query("DROP TABLE IF EXISTS tempProducts");
 
         $this->db->query("create table tempProducts " . $resultado->getCompiledSelect());
+        
+        
 
         return $this->db->table('tempProducts');
     }
