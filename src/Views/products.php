@@ -120,9 +120,9 @@
         },
         columnDefs: [{
                 orderable: false,
-                targets: [11, 15],
+                targets: [1,11, 15],
                 searchable: false,
-                targets: [11, 15]
+                targets: [1,11, 15]
 
             }],
         columns: [{
@@ -130,7 +130,7 @@
             },
 
             {
-                'data': 'nombreEmpresa'
+                'data': 'nombre'
             },
 
             {

@@ -13,6 +13,7 @@ use julio101290\boilerplatecompanies\Models\EmpresasModel;
 use julio101290\boilerplatesells\Models\SellsDetailsModel;
 use julio101290\boilerplatequotes\Models\QuotesDetailsModel;
 use julio101290\boilerplatetypesmovement\Models\Tipos_movimientos_inventarioModel;
+use Hermawan\DataTables\DataTable;
 
 //use App\Models\SellsDetailsModel;
 //use App\Models\Tipos_movimientos_inventarioModel;
@@ -26,7 +27,6 @@ class ProductsController extends BaseController {
     protected $empresa;
     protected $categorias;
     protected $sellsDetails;
-
     protected $quoteDetails;
     protected $tiposMovimientoInventario;
 
@@ -87,8 +87,26 @@ class ProductsController extends BaseController {
 
 
         if ($this->request->isAJAX()) {
-            $datos = $this->products->mdlProductosEmpresa($empresasID, $empresa);
-            return \Hermawan\DataTables\DataTable::of($datos)->toJson(true);
+
+
+            $request = $this->request;
+            $draw = (int) $request->getGet('draw');
+            $start = (int) $request->getGet('start');
+            $length = (int) $request->getGet('length');
+            $search = $request->getGet('search')['value'] ?? '';
+            $empresa = (int) $empresa;
+
+            // Obtiene paginación manual desde el modelo
+            $resultados = $this->products
+                    ->mdlProductosEmpresa($empresasID, $empresa, $start, $length, $search);
+
+            // Retorna JSON con formato de DataTables
+            return $this->response->setJSON([
+                        'draw' => $draw,
+                        'recordsTotal' => $resultados['recordsTotal'],
+                        'recordsFiltered' => $resultados['recordsFiltered'],
+                        'data' => $resultados['data'],
+            ]);
         }
     }
 
