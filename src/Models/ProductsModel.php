@@ -96,6 +96,8 @@ class ProductsModel extends Model {
 // Condición para inventario NULL en PostgreSQL vs MySQL
         $driver = $this->db->DBDriver;
         $isNull = $driver === 'Postgre' ? '"a"."inventarioRiguroso" IS NULL' : 'a.inventarioRiguroso IS NULL';
+        
+        $like = $driver === 'Postgre' ? 'ILIKE' : 'LIKE';
 
 // Subconsulta 1: productos sin inventario riguroso
         $b1 = $this->db->table('products AS a')
@@ -197,7 +199,7 @@ class ProductsModel extends Model {
         $filterSql = "SELECT COUNT(*) AS total FROM $sub";
         $filterParams = [];
         if ($search !== '') {
-            $filterSql .= " WHERE description ILIKE ? OR code ILIKE ?";
+            $filterSql .= " WHERE description $like ? OR code $like ?";
             $filterParams = ["%$search%", "%$search%"];
         }
         $filteredRow = $this->db->query($filterSql, $filterParams)->getRow();
@@ -207,7 +209,7 @@ class ProductsModel extends Model {
         $dataSql = "SELECT * FROM $sub";
         $dataParams = [];
         if ($search !== '') {
-            $dataSql .= " WHERE description ILIKE ? OR code ILIKE ?";
+            $dataSql .= " WHERE description $like ? OR code $like ?";
             $dataParams = ["%$search%", "%$search%"];
         }
         $dataSql .= " ORDER BY description ASC LIMIT ? OFFSET ?";
