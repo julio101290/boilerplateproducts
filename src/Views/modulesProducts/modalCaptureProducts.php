@@ -413,9 +413,9 @@
                 return;
             }
 
-            var maxSize = 2 * 1024 * 1024; // 2 MB
+            var maxSize = 5 * 1024 * 1024; // 2 MB
             if (imagenProducto.size > maxSize) {
-                Toast.fire({icon: 'error', title: "La imagen pesa más de 2 MB."});
+                Toast.fire({icon: 'error', title: "La imagen pesa más de 5 MB."});
                 $btn.removeAttr("disabled");
                 return;
             }

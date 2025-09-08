@@ -363,7 +363,7 @@ class ProductsController extends BaseController {
             $allowed = ['png', 'jpg', 'jpeg'];
 
             $ext = strtolower($imagenProducto->getClientExtension() ?: '');
-            $maxSize = 2 * 1024 * 1024; // 2 MB
+            $maxSize = 5 * 1024 * 1024; // 5 MB
 
             if (!in_array($ext, $allowed)) {
                 // Devuelve JSON con error y código apropiado
