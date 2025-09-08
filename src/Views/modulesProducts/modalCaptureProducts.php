@@ -339,7 +339,12 @@
 
 
     $(document).on('click', '#btnSaveProducts', function (e) {
+        e.preventDefault();
 
+        var $btn = $("#btnSaveProducts");
+        $btn.attr("disabled", true);
+
+        // Campos
         var idEmpresa = $("#idEmpresa").val();
         var idProducts = $("#idProducts").val();
         var clave = $("#code").val();
@@ -355,8 +360,6 @@
         var porcentISRRetenido = $("#porcentISRRetenido").val();
         var routeImage = $("#routeImage").val();
 
-
-
         var unidadSAT = $("#unidadSAT").val();
         var unidad = $("#unidad").val();
         var claveProductoSAT = $("#claveProductoSAT").val();
@@ -364,104 +367,61 @@
         var nombreUnidadSAT = $("#unidadSAT option:selected").text();
         var nombreClaveProducto = $("#claveProductoSAT option:selected").text();
 
-
-
         var predial = $("#predial").val();
-
-
 
         var imagenProducto = $("#imagenProducto").prop("files")[0];
 
-        if ($("#validateStock").is(':checked')) {
+        var validateStock = $("#validateStock").is(':checked') ? "on" : "off";
+        var inventarioRiguroso = $("#inventarioRiguroso").is(':checked') ? "on" : "off";
+        var tasaExcenta = $("#tasaExcenta").is(':checked') ? "on" : "off";
+        var inmuebleOcupado = $("#inmuebleOcupado").is(':checked') ? "on" : "off";
 
-            var validateStock = "on";
-
-        } else {
-
-            var validateStock = "off";
-
-        }
-
-
-        if ($("#inventarioRiguroso").is(':checked')) {
-
-            var inventarioRiguroso = "on";
-
-        } else {
-
-            var inventarioRiguroso = "off";
-
-        }
-
-        /*
-         * Asignamos si va ser tasa exenta
-         */
-
-        if ($("#tasaExcenta").is(':checked')) {
-
-            var tasaExcenta = "on";
-
-        } else {
-
-            var tasaExcenta = "off";
-
-        }
-
-
-        /*
-         * Valida que el inmueble este ocupado
-         */
-
-        if ($("#inmuebleOcupado").is(':checked')) {
-
-            var inmuebleOcupado = "on";
-
-        } else {
-
-            var inmuebleOcupado = "off";
-
-        }
-
-
-
-
-        if (idEmpresa == 0 || idEmpresa == "") {
-
-            Toast.fire({
-                icon: 'error',
-                title: "Tiene que seleccionar la empresa"
-            });
-
+        // Validaciones del formulario
+        if (!idEmpresa) {
+            Toast.fire({icon: 'error', title: "Tiene que seleccionar la empresa"});
+            $btn.removeAttr("disabled");
             return;
-
         }
 
-        if (idCategory == 0 || idCategory == "") {
-
-            Toast.fire({
-                icon: 'error',
-                title: "Tiene que seleccionar la categoria"
-            });
-
+        if (!idCategory) {
+            Toast.fire({icon: 'error', title: "Tiene que seleccionar la categoria"});
+            $btn.removeAttr("disabled");
             return;
-
         }
 
-        if (porcentTax == "") {
-
-            Toast.fire({
-                icon: 'error',
-                title: "Tiene que ingregar el porcentaje de impuesto"
-            });
-
+        if (!porcentTax && porcentTax !== "0") {
+            Toast.fire({icon: 'error', title: "Tiene que ingregar el porcentaje de impuesto"});
+            $btn.removeAttr("disabled");
             return;
-
         }
 
+        // Validación de la imagen (si existe)
+        if (imagenProducto) {
+            var tiposPermitidos = ["image/png", "image/jpeg", "image/jpg"];
+            var nombre = (imagenProducto.name || "").toLowerCase();
+            var esHeic = (imagenProducto.type && imagenProducto.type.indexOf("heic") !== -1) || /\.heic$/i.test(nombre);
 
+            if (esHeic) {
+                Toast.fire({icon: 'error', title: "HEIC no permitido. Use JPG o PNG."});
+                $btn.removeAttr("disabled");
+                return;
+            }
 
-        $("#btnSaveProducts").attr("disabled", true);
+            if (tiposPermitidos.indexOf(imagenProducto.type) === -1) {
+                Toast.fire({icon: 'error', title: "Formato no válido. Solo JPG/JPEG o PNG."});
+                $btn.removeAttr("disabled");
+                return;
+            }
 
+            var maxSize = 2 * 1024 * 1024; // 2 MB
+            if (imagenProducto.size > maxSize) {
+                Toast.fire({icon: 'error', title: "La imagen pesa más de 2 MB."});
+                $btn.removeAttr("disabled");
+                return;
+            }
+        }
+
+        // Construir FormData
         var datos = new FormData();
         datos.append("idEmpresa", idEmpresa);
         datos.append("idProducts", idProducts);
@@ -475,8 +435,6 @@
         datos.append("porcentTax", porcentTax);
         datos.append("porcentIVARetenido", porcentIVARetenido);
         datos.append("porcentISRRetenido", porcentISRRetenido);
-
-        datos.append("imagenProducto", imagenProducto);
         datos.append("barcode", barcode);
         datos.append("validateStock", validateStock);
         datos.append("inventarioRiguroso", inventarioRiguroso);
@@ -484,7 +442,6 @@
         datos.append("unidadSAT", unidadSAT);
         datos.append("unidad", unidad);
         datos.append("claveProductoSAT", claveProductoSAT);
-
         datos.append("nombreUnidadSAT", nombreUnidadSAT);
         datos.append("nombreClaveProducto", nombreClaveProducto);
 
@@ -492,48 +449,68 @@
         datos.append("tasaExcenta", tasaExcenta);
         datos.append("predial", predial);
 
+        // enviar routeImage si existe (ruta previa)
+        if (typeof routeImage !== 'undefined') {
+            datos.append("routeImage", routeImage);
+        }
 
+        // sólo añadir archivo si existe
+        if (imagenProducto) {
+            datos.append("imagenProducto", imagenProducto);
+        }
 
         $.ajax({
-
             url: "<?= base_url('admin/products/save') ?>",
             method: "POST",
             data: datos,
             cache: false,
             contentType: false,
             processData: false,
+            dataType: "json", // esperamos JSON; si el servidor devuelve texto, lo manejamos abajo
             success: function (respuesta) {
-                if (respuesta.match(/Correctamente.*/)) {
-
-                    Toast.fire({
-                        icon: 'success',
-                        title: "Guardado Correctamente"
-                    });
-
-                    tableProducts.ajax.reload();
-                    $("#btnSaveProducts").removeAttr("disabled");
-
-
-                    $('#modalAddProducts').modal('hide');
+                // Manejar JSON {status:'ok'|'error', message:'...'}
+                if (respuesta && typeof respuesta === 'object') {
+                    if (respuesta.status === 'ok') {
+                        Toast.fire({icon: 'success', title: respuesta.message || "Guardado Correctamente"});
+                        tableProducts.ajax.reload();
+                        $('#modalAddProducts').modal('hide');
+                    } else {
+                        Toast.fire({icon: 'error', title: respuesta.message || "Ocurrió un error"});
+                    }
+                } else if (typeof respuesta === 'string') {
+                    // Compatibilidad con respuestas en texto plano
+                    if (respuesta.match(/Correctamente.*/)) {
+                        Toast.fire({icon: 'success', title: "Guardado Correctamente"});
+                        tableProducts.ajax.reload();
+                        $('#modalAddProducts').modal('hide');
+                    } else {
+                        Toast.fire({icon: 'error', title: respuesta});
+                    }
                 } else {
-
-                    Toast.fire({
-                        icon: 'error',
-                        title: respuesta
-                    });
-
-                    $("#btnSaveProducts").removeAttr("disabled");
-
-
+                    Toast.fire({icon: 'error', title: "Respuesta inválida del servidor"});
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                var msg = "Error en la petición: " + textStatus;
+                // intentar obtener mensaje detallado del servidor
+                try {
+                    if (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                        msg = jqXHR.responseJSON.message;
+                    } else if (jqXHR && jqXHR.responseText) {
+                        msg = jqXHR.responseText;
+                    }
+                } catch (ex) { /* ignorar */
                 }
 
+                Toast.fire({icon: 'error', title: msg});
+            },
+            complete: function () {
+                $btn.removeAttr("disabled");
             }
-
-        }
-
-        )
+        });
 
     });
+
 </script>
 
 

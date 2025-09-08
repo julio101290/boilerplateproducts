@@ -120,9 +120,9 @@
         },
         columnDefs: [{
                 orderable: false,
-                targets: [1,11, 15],
+                targets: [1, 11, 15],
                 searchable: false,
-                targets: [1,11, 15]
+                targets: [1, 11, 15]
 
             }],
         columns: [{
@@ -292,8 +292,8 @@
                 $("#inventarioRiguroso").bootstrapToggle(respuesta["inventarioRiguroso"]);
                 $("#inmuebleOcupado").bootstrapToggle(respuesta["inmuebleOcupado"]);
                 $("#tasaExcenta").bootstrapToggle(respuesta["tasaExcenta"]);
-                
-                
+
+
                 $("#predial").val(respuesta["predial"]);
 
                 //$("#routeImage").val(respuesta["routeImage"]);
@@ -374,49 +374,51 @@
      SUBIENDO LA FOTO DEL USUARIO
      =============================================*/
     $(".imagenProducto").change(function () {
+        var input = this;
+        var imagen = input.files[0];
+        if (!imagen)
+            return;
 
+        // MIME que consideramos válidos (JPEG y PNG)
+        var tiposPermitidos = ["image/png", "image/jpeg", "image/jpg"];
 
+        // Rechazar HEIC explícitamente (iPhone puede enviar image/heic)
+        var nombre = (imagen.name || "").toLowerCase();
+        var esHeic = imagen.type && imagen.type.indexOf("heic") !== -1 || /\.heic$/i.test(nombre);
 
-        var imagen = this.files[0];
-
-        /*=============================================
-         VALIDAMOS EL FORMATO DE LA IMAGEN SEA JPG O PNG
-         =============================================*/
-
-        if (imagen["type"] != "image/png") {
-
-            $(".imagenProducto").val("");
-
+        if (esHeic) {
+            $(input).val("");
             Toast.fire({
                 icon: 'error',
-                title: "<?= lang('empresas.imagenesFormato') ?>",
+                title: "HEIC no permitido. Por favor use JPG o PNG.",
             });
-
-
-        } else if (imagen["size"] > 2000000) {
-
-            $(".imagenProducto").val("");
-
-            Toast.fire({
-                icon: 'error',
-                title: "<?= lang('empresas.imagenesPeso') ?>",
-            });
-
-
-        } else {
-
-            var datosImagen = new FileReader;
-            datosImagen.readAsDataURL(imagen);
-
-            $(datosImagen).on("load", function (event) {
-
-                var rutaImagen = event.target.result;
-
-                $(".previsualizarLogo").attr("src", rutaImagen);
-
-            })
-
+            return;
         }
+
+        if (tiposPermitidos.indexOf(imagen.type) === -1) {
+            $(input).val("");
+            Toast.fire({
+                icon: 'error',
+                title: "Formato no válido. Solo JPG/JPEG o PNG.",
+            });
+            return;
+        }
+
+        var maxSize = 2 * 1024 * 1024; // 2 MB
+        if (imagen.size > maxSize) {
+            $(input).val("");
+            Toast.fire({
+                icon: 'error',
+                title: "La imagen pesa más de 2 MB.",
+            });
+            return;
+        }
+
+        // Preview
+        var url = URL.createObjectURL(imagen);
+        $(".previsualizarLogo").attr("src", url).on("load", function () {
+            URL.revokeObjectURL(url);
+        });
     });
 
 

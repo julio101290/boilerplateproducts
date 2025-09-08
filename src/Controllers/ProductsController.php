@@ -347,72 +347,109 @@ class ProductsController extends BaseController {
         helper('auth');
         $userName = user()->username;
         $idUser = user()->id;
+
+        // Recogemos datos POST (sin archivos)
         $datos = $this->request->getPost();
 
-        var_dump($datos);
-        $imagenProducto = $this->request->getFile("imagenProducto");
-        $datos["routeImage"] = "";
-        if ($imagenProducto) {
+        // Eliminé el var_dump($datos) (no mostrar en producción)
+        $imagenProducto = $this->request->getFile('imagenProducto');
 
-            if ($imagenProducto->getClientExtension() <> "png") {
+        // Inicializamos routeImage con lo que venga (ruta previa) o vacío
+        $datos['routeImage'] = $this->request->getPost('routeImage') ?? '';
 
-                return lang("empresas.pngFileExtensionIncorrect");
+        // Validaciones del archivo (si se envió)
+        if ($imagenProducto && $imagenProducto->isValid() && !$imagenProducto->hasMoved()) {
+            // Extensiones permitidas
+            $allowed = ['png', 'jpg', 'jpeg'];
+
+            $ext = strtolower($imagenProducto->getClientExtension() ?: '');
+            $maxSize = 2 * 1024 * 1024; // 2 MB
+
+            if (!in_array($ext, $allowed)) {
+                // Devuelve JSON con error y código apropiado
+                return $this->response
+                                ->setStatusCode(415)
+                                ->setJSON(['status' => 'error', 'message' => lang('empresas.imageExtensionIncorrect')]);
             }
-            $datos["routeImage"] = $imagenProducto->getRandomName();
+
+            if ($imagenProducto->getSize() > $maxSize) {
+                return $this->response
+                                ->setStatusCode(413)
+                                ->setJSON(['status' => 'error', 'message' => lang('empresas.imageTooLarge')]);
+            }
+
+            // Generamos nuevo nombre para guardar
+            $datos['routeImage'] = $imagenProducto->getRandomName();
+        } elseif ($imagenProducto && !$imagenProducto->isValid()) {
+            // Error durante el upload
+            return $this->response
+                            ->setStatusCode(400)
+                            ->setJSON(['status' => 'error', 'message' => 'Error al subir imagen: ' . $imagenProducto->getErrorString()]);
         }
 
-
-        if ($datos["idProducts"] == 0) {
+        // Insertar
+        if (empty($datos['idProducts']) || $datos['idProducts'] == 0) {
             try {
                 if ($this->products->save($datos) === false) {
                     $errores = $this->products->errors();
-                    foreach ($errores as $field => $error) {
-                        echo $error . " ";
-                    }
-                    return;
+                    $msg = implode(' ', $errores);
+                    return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => $msg]);
                 }
-                $dateLog["description"] = lang("vehicles.logDescription") . json_encode($datos);
+
+                // Log
+                $dateLog["description"] = lang("products.logDescription") . json_encode($datos);
                 $dateLog["user"] = $userName;
                 $this->log->save($dateLog);
 
-                if ($imagenProducto <> null) {
-                    $imagenProducto->move("images/products", $datos["routeImage"]);
+                // Mover archivo (solo si se subió)
+                if ($imagenProducto && $imagenProducto->isValid()) {
+                    // Usar FCPATH para la carpeta pública (images/products)
+                    $targetPath = FCPATH . 'images/products';
+                    // Asegurarse que la carpeta existe
+                    if (!is_dir($targetPath)) {
+                        mkdir($targetPath, 0755, true);
+                    }
+                    $imagenProducto->move($targetPath, $datos['routeImage']);
                 }
 
-                echo "Guardado Correctamente";
-            } catch (\PHPUnit\Framework\Exception $ex) {
-                echo "Error al guardar " . $ex->getMessage();
+                return $this->response->setJSON(['status' => 'ok', 'message' => 'Guardado Correctamente']);
+            } catch (\Exception $ex) {
+                return $this->response->setStatusCode(500)->setJSON(['status' => 'error', 'message' => 'Error al guardar: ' . $ex->getMessage()]);
             }
-        } else {
+        }
 
-            $dataPrevious = $this->products->find($datos["idProducts"]);
+        // Actualizar
+        $dataPrevious = $this->products->find($datos['idProducts']);
 
-            if ($this->products->update($datos["idProducts"], $datos) == false) {
+        try {
+            if ($this->products->update($datos['idProducts'], $datos) == false) {
                 $errores = $this->products->errors();
-                foreach ($errores as $field => $error) {
-                    echo $error . " ";
-                }
-                return;
+                $msg = implode(' ', $errores);
+                return $this->response->setStatusCode(400)->setJSON(['status' => 'error', 'message' => $msg]);
             } else {
                 $dateLog["description"] = lang("products.logUpdated") . json_encode($datos);
                 $dateLog["user"] = $userName;
                 $this->log->save($dateLog);
 
-                if ($imagenProducto <> null) {
-
-                    if (file_exists("images/products/" . $dataPrevious["routeImage"])) {
-                        unlink("images/products/" . $dataPrevious["routeImage"]);
+                if ($imagenProducto && $imagenProducto->isValid()) {
+                    $targetPath = FCPATH . 'images/products';
+                    if (!is_dir($targetPath)) {
+                        mkdir($targetPath, 0755, true);
                     }
-                    $imagenProducto->move("images/products", $datos["routeImage"]);
+
+                    // Borrar la imagen anterior si existe y la ruta anterior no está vacía
+                    if (!empty($dataPrevious['routeImage']) && file_exists($targetPath . '/' . $dataPrevious['routeImage'])) {
+                        @unlink($targetPath . '/' . $dataPrevious['routeImage']);
+                    }
+
+                    $imagenProducto->move($targetPath, $datos['routeImage']);
                 }
 
-
-
-                echo "Actualizado Correctamente";
-                return;
+                return $this->response->setJSON(['status' => 'ok', 'message' => 'Actualizado Correctamente']);
             }
+        } catch (\Exception $ex) {
+            return $this->response->setStatusCode(500)->setJSON(['status' => 'error', 'message' => 'Error al actualizar: ' . $ex->getMessage()]);
         }
-        return;
     }
 
     /**
