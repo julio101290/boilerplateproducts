@@ -45,10 +45,17 @@
             "Tests\\": "tests/"
         }
     },
+    "extra": {
+        "public-dir": "public"
+    },
     "scripts": {
-        "post-update-cmd": [
+        "post-install-cmd": [
+            "php vendor/julio101290/boilerplateproducts/scripts/install-assets.php",
             "@composer dump-autoload"
         ],
-        "test": "phpunit --colors=always -vvv"
+        "post-update-cmd": [
+            "php vendor/julio101290/boilerplateproducts/scripts/install-assets.php",
+            "@composer dump-autoload"
+        ]
     }
 }
