@@ -1,0 +1,38 @@
+<?php
+
+namespace julio101290\boilerplateproducts\Models;
+
+use CodeIgniter\Model;
+
+class SubcategoriasModel extends Model {
+
+    protected $table = 'subcategorias';
+    protected $primaryKey = 'id';
+    protected $useAutoIncrement = true;
+    protected $returnType = 'array';
+    protected $useSoftDeletes = true;
+    protected $allowedFields = ['id', 'idEmpresa', 'idCategoria', 'descripcion', 'created_at', 'updated_at', 'deleted_at'];
+    protected $useTimestamps = true;
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
+    protected $deletedField = 'deleted_at';
+    protected $validationRules = [];
+    protected $validationMessages = [];
+    protected $skipValidation = false;
+
+    public function mdlGetSubcategorias(array $idEmpresas) {
+        return $this->db->table('subcategorias a')
+                        ->join('empresas b', 'a.idEmpresa = b.id')
+                        ->join('categorias c', 'a.idCategoria = c.id')
+                        ->select("a.id"
+                                . ", a.idEmpresa"
+                                . ", a.idCategoria"
+                                . ", a.descripcion"
+                                . ", a.created_at"
+                                . ", a.updated_at"
+                                . ", a.deleted_at"
+                                . ", c.descripcion as nombreCategoria"
+                                . ", b.nombre AS nombreEmpresa")
+                        ->whereIn('a.idEmpresa', $idEmpresas);
+    }
+}

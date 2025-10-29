@@ -16,6 +16,7 @@ class ProductsModel extends Model {
         , 'idEmpresa'
         , 'code'
         , 'idCategory'
+        , 'idSubCategoria'
         , 'description'
         , 'stock'
         , 'validateStock'
@@ -96,7 +97,7 @@ class ProductsModel extends Model {
 // Condición para inventario NULL en PostgreSQL vs MySQL
         $driver = $this->db->DBDriver;
         $isNull = $driver === 'Postgre' ? '"a"."inventarioRiguroso" IS NULL' : 'a.inventarioRiguroso IS NULL';
-        
+
         $like = $driver === 'Postgre' ? 'ILIKE' : 'LIKE';
 
 // Subconsulta 1: productos sin inventario riguroso
@@ -325,6 +326,7 @@ class ProductsModel extends Model {
                         a.validateStock AS validateStock,
                         a.inventarioRiguroso AS inventarioRiguroso,
                         a.idCategory AS idCategory,
+                        a.idSubCategoria AS idSubCategoria,
                         c.clave AS clave,
                         c.descripcion AS descripcionCategoria,
                         a.description AS description,

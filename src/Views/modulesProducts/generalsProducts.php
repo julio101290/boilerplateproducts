@@ -46,6 +46,32 @@
     </div>
 
 </div>
+
+
+<div class="form-group row">
+    <label for="idCategory" class="col-sm-2 col-form-label">
+        <?= lang('products.fields.idSubCategory') ?>
+    </label>
+    <div class="col-sm-10">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-pencil-alt"></i></span>
+            </div>
+            <select name="idSubCategoria" id="idSubCategoria" style="width: 90%;" class="form-control idSubCategoria form-controlProducts">
+                <option value="0" selected>
+                    <?= lang('products.fields.idSelectSubCategory') ?>
+                </option>
+
+
+
+            </select>
+
+
+        </div>
+    </div>
+
+</div>
+
 <div class="form-group row">
     <label for="code" class="col-sm-2 col-form-label">
         Clave

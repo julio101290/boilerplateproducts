@@ -13,6 +13,7 @@ use julio101290\boilerplatecompanies\Models\EmpresasModel;
 use julio101290\boilerplatesells\Models\SellsDetailsModel;
 use julio101290\boilerplatequotes\Models\QuotesDetailsModel;
 use julio101290\boilerplatetypesmovement\Models\Tipos_movimientos_inventarioModel;
+use julio101290\boilerplateproducts\Models\SubcategoriasModel;
 use Hermawan\DataTables\DataTable;
 
 //use App\Models\SellsDetailsModel;
@@ -26,6 +27,7 @@ class ProductsController extends BaseController {
     protected $products;
     protected $empresa;
     protected $categorias;
+    protected $subCategorias;
     protected $sellsDetails;
     protected $quoteDetails;
     protected $tiposMovimientoInventario;
@@ -34,6 +36,7 @@ class ProductsController extends BaseController {
         $this->products = new ProductsModel();
         $this->log = new LogModel();
         $this->categorias = new CategoriasModel();
+        $this->subCategorias = new SubcategoriasModel();
         $this->empresa = new EmpresasModel();
         $this->sellsDetails = new SellsDetailsModel();
         $this->quoteDetails = new QuotesDetailsModel();
@@ -336,6 +339,21 @@ class ProductsController extends BaseController {
         $idProducts = $this->request->getPost("idProducts");
 
         $datosProducts = $this->products->mdlGetProductoEmpresa($empresasID, $idProducts);
+
+        //GET SUB CATEGORY
+
+        if ($datosProducts->idSubCategoria == null) {
+
+            $datosProducts->descriptionSubCategory = "Sin SubCategoria";
+        } else {
+
+            $subCategory = $this->subCategorias->select("descripcion")
+                    ->where("id", $datosProducts->idSubCategoria)
+                    ->first();
+
+            $datosProducts->descriptionSubCategory = $subCategory["descripcion"];
+        }
+
 
         echo json_encode($datosProducts);
     }

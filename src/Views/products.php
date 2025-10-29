@@ -261,7 +261,9 @@
                 $('#idCategory').append(newOption).trigger('change');
                 $("#idCategory").val(respuesta["idCategory"]);
 
-
+                var newOptionSubCategory = new Option(respuesta["idSubCategoria"] + ' ' + respuesta["descriptionSubCategory"], respuesta["idSubCategoria"], true, true);
+                $('#idSubCategoria').append(newOptionSubCategory).trigger('change');
+                $("#idSubCategoria").val(newOptionSubCategory["idSubCategoria"]);
 
                 var newOptionUnidad = new Option(respuesta["nombreUnidadSAT"], respuesta["unidadSAT"], true, true);
                 $('#unidadSAT').append(newOptionUnidad).trigger('change');

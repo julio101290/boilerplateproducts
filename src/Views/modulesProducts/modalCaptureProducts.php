@@ -207,7 +207,77 @@
         }
     });
 
+    /**
+     * Categorias por empresa
+     */
 
+    $(".idCategory").select2({
+        ajax: {
+            url: "<?= base_url('admin/categorias/getCategoriasAjax') ?>",
+            type: "post",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                // CSRF Hash
+                var csrfName = $('.txt_csrfname').attr('name'); // CSRF Token name
+                var csrfHash = $('.txt_csrfname').val(); // CSRF hash
+                var idEmpresa = $('.idEmpresa').val(); // CSRF hash
+
+                return {
+                    searchTerm: params.term, // search term
+                    [csrfName]: csrfHash, // CSRF Token
+                    idEmpresa: idEmpresa // search term
+                };
+            },
+            processResults: function (response) {
+
+                // Update CSRF Token
+                $('.txt_csrfname').val(response.token);
+
+                return {
+                    results: response.data
+                };
+            },
+            cache: true
+        }
+    });
+
+    /**
+     * Categorias por empresa
+     */
+
+    $(".idSubCategoria").select2({
+        ajax: {
+            url: "<?= base_url('admin/subCategorias/getSubCategoriasAjax') ?>",
+            type: "post",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                // CSRF Hash
+                var csrfName = $('.txt_csrfname').attr('name'); // CSRF Token name
+                var csrfHash = $('.txt_csrfname').val(); // CSRF hash
+                var idEmpresa = $('.idEmpresa').val(); // CSRF hash
+                var idCategoria = $('.idCategory').val(); // CSRF hash
+
+                return {
+                    searchTerm: params.term, // search term
+                    [csrfName]: csrfHash, // CSRF Token
+                    idEmpresa: idEmpresa, // search term
+                    idCategoria: idCategoria // category
+                };
+            },
+            processResults: function (response) {
+
+                // Update CSRF Token
+                $('.txt_csrfname').val(response.token);
+
+                return {
+                    results: response.data
+                };
+            },
+            cache: true
+        }
+    });
 
 
     /**
@@ -349,6 +419,7 @@
         var idProducts = $("#idProducts").val();
         var clave = $("#code").val();
         var idCategory = $("#idCategory").val();
+        var idSubCategory = $("#idSubCategoria").val();
         var barcode = $("#barcode").val();
         var description = $("#description").val();
         var stock = $("#stock").val();
@@ -427,6 +498,7 @@
         datos.append("idProducts", idProducts);
         datos.append("code", clave);
         datos.append("idCategory", idCategory);
+        datos.append("idSubCategoria", idSubCategory);
         datos.append("description", description);
         datos.append("stock", stock);
         datos.append("buyPrice", buyPrice);
