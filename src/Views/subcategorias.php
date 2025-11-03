@@ -149,7 +149,7 @@
                 $("#idCategoria").val(respuesta["idCategoria"]);
                 
                 
-                 var newOptionCategory = new Option(respuesta["descriptionCategory"], respuesta["idCategoria"], true, true);
+                var newOptionCategory = new Option(respuesta["descriptionCategory"], respuesta["idCategoria"], true, true);
                 $('#idCategoria').append(newOptionCategory).trigger('change');
                 $("#idCategoria").val(respuesta["idCategoria"]);
                 

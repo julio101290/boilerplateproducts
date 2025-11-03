@@ -91,4 +91,26 @@ $routes->group('admin', function ($routes) {
             , 'SubcategoriasController::getSubCategoriasAjax'
             , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
     );
+
+    $routes->resource('fieldsExtraProductos', [
+        'filter' => 'permission:fieldsExtraProductos-permission',
+        'controller' => 'fieldsExtraProductosController',
+        'namespace' => 'julio101290\boilerplateproducts\Controllers',
+        'except' => 'show'
+    ]);
+
+    $routes->post('fieldsExtraProductos/save'
+            , 'FieldsExtraProductosController::save'
+            , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
+    );
+    
+    $routes->post('fieldsExtraProductos/save'
+            , 'FieldsExtraProductosController::save'
+             , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
+            );
+    
+    $routes->post('fieldsExtraProductos/getFieldsExtraProductos'
+            , 'FieldsExtraProductosController::getFieldsExtraProductos'
+             , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
+            );
 });

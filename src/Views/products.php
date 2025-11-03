@@ -427,6 +427,10 @@
 
 
 
+        $(".options").on("change", function () {
+            console.log("asd");
+        });
+  
 
 </script>
 
