@@ -164,7 +164,7 @@
 
 
                 $("#type").val(respuesta["type"]);
-              
+
 
 
                 var options = respuesta["options"];
@@ -187,6 +187,20 @@
 
 
                 $("#description").val(respuesta["description"]);
+
+
+                var value = respuesta["type"];
+              
+
+                if (value == 2) {
+
+                    $(".classOptions").show();     // lo muestra
+
+                } else {
+
+                    $(".classOptions").hide();     // lo oculta
+
+                }
 
             }
         });
