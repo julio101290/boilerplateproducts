@@ -40,12 +40,14 @@ class BoilerplateProducts extends Seeder {
         $this->authorize->createPermission('products-permission', 'Permissions for products');
         $this->authorize->createPermission('categorias-permission', 'Permissions for products');
         $this->authorize->createPermission('subcategorias-permission', 'Permiso para la lista de subcategorias');
+        $this->authorize->createPermission('fieldsExtraProductos-permission', 'Permiso para la lista de fieldsExtraProductos');
        
 
         // Assign Permission to user
         $this->authorize->addPermissionToUser('products-permission', 1);
         $this->authorize->addPermissionToUser('categorias-permission', 1);
         $this->authorize->addPermissionToUser('subcategorias-permission', 1);
+        $this->authorize->addPermissionToUser('fieldsExtraProductos-permission', 1);
 
     }
 
