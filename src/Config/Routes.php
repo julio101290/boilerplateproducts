@@ -103,14 +103,24 @@ $routes->group('admin', function ($routes) {
             , 'FieldsExtraProductosController::save'
             , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
     );
-    
+
     $routes->post('fieldsExtraProductos/save'
             , 'FieldsExtraProductosController::save'
-             , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
-            );
-    
+            , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
+    );
+
     $routes->post('fieldsExtraProductos/getFieldsExtraProductos'
             , 'FieldsExtraProductosController::getFieldsExtraProductos'
-             , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
-            );
+            , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
+    );
+
+    $routes->post('products/getProductsFieldsExtra'
+            , 'ProductsController::getProductsFieldsExtra'
+            , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
+    );
+
+    $routes->post('products/saveExtraFields'
+            , 'ProductsController::saveExtraFields'
+            , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
+    );
 });

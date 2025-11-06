@@ -11,6 +11,7 @@
 <?= $this->section('content') ?>
 
 <?= $this->include('julio101290\boilerplateproducts\Views\modulesProducts/modalCaptureProducts') ?>
+<?= $this->include('julio101290\boilerplateproducts\Views\modulesProducts/extraFields') ?>
 
 <!-- SELECT2 EXAMPLE -->
 <div class="card card-default">
@@ -203,6 +204,7 @@
                     return `<td class="text-right py-0 align-middle">
                          <div class="btn-group btn-group-sm">
                              <button class="btn btn-warning btnEditProducts" data-toggle="modal" idProducts="${data.id}" data-target="#modalAddProducts">  <i class=" fa fa-edit"></i></button>
+                             <button class="btn btn-primary btnEditExtra" data-toggle="modal" idProducts="${data.id}" data-target="#modalAddExtraFields">  <i class=" fa fa-plus"></i></button>
                              <button class="btn btn-danger btn-delete" data-id="${data.id}"><i class="fas fa-trash"></i></button>
                              <button class="btn btn-success btn-barcode" data-id="${data.id}"><i class="fas fa-barcode"></i></button>
                          </div>
@@ -319,11 +321,44 @@
 
     })
 
+    /**
+     * Extra Fields
+     */
+
     $(".tableProducts").on("click", ".btn-barcode", function () {
 
         var idProduct = $(this).attr("data-id");
 
-        window.open("<?= base_url('admin/products/barcode') ?>" + "/" + idProduct, "_blank");
+
+
+    });
+
+    $(".tableProducts").on("click", ".btnEditExtra", function () {
+
+        var idProduct = $(this).attr("idproducts");
+        
+        console.log("idProduc:",idProduct);
+        
+        var datos = new FormData();
+        datos.append("idProduct", idProduct);
+
+        $.ajax({
+
+            url: "<?= base_url('admin/products/getProductsFieldsExtra') ?>",
+            method: "POST",
+            data: datos,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (respuesta) {
+               
+                $(".extraFields").html(respuesta);
+
+            }
+
+        })
+
+
 
     });
 
@@ -427,10 +462,10 @@
 
 
 
-        $(".options").on("change", function () {
-            console.log("asd");
-        });
-  
+    $(".options").on("change", function () {
+        console.log("asd");
+    });
+
 
 </script>
 
