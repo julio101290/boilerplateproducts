@@ -624,14 +624,14 @@ class ProductsController extends BaseController {
         if ($idProducto == 0) {
 
 
-            $productos = $this->products->select("id")->whereIn("idEmpresa", $empresasID)->findAll();
+            $productos = $this->products->select("id,barcode")->whereIn("idEmpresa", $empresasID)->findAll();
 
             foreach ($productos as $key => $value) {
 
-                $pdf->AddPage('P', 'A7');
+                $pdf->AddPage('L', array(101, 50));
 
-                $pdf->Cell(0, 0, 'BAR CODE', 0, 1);
-                $pdf->write1DBarcode($value["barcode"], 'S25', '', '', '', 18, 0.4, $style, 'N');
+                //$pdf->Cell(0, 0, 'BAR CODE', 0, 1);
+                $pdf->write1DBarcode($value["barcode"], 'C39', '', '', '', 18, 0.4, $style, 'N');
             }
 
             ob_end_clean();
@@ -646,10 +646,10 @@ class ProductsController extends BaseController {
                         ->whereIn("idEmpresa", $empresasID)
                         ->where("id", $idProducto)->findAll();
 
-        $pdf->AddPage('P', 'A7');
+        $pdf->AddPage('L',array(101, 50));
 
-        $pdf->Cell(0, 0, 'BAR CODE', 0, 1);
-        $pdf->write1DBarcode($productos[0]["barcode"], 'S25', '', '', '', 18, 0.4, $style, 'N');
+
+        $pdf->write1DBarcode($productos[0]["barcode"], 'C39', '', '', '', 18, 0.4, $style, 'N');
 
         ob_end_clean();
         $this->response->setHeader("Content-Type", "application/pdf");

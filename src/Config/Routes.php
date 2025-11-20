@@ -123,4 +123,9 @@ $routes->group('admin', function ($routes) {
             , 'ProductsController::saveExtraFields'
             , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
     );
+
+    $routes->get('product/usuariosPorProducto/(:any)'
+            , 'ProductsUsersController::getProductsByUserAjax/$1'
+            , ['namespace' => 'julio101290\boilerplateproducts\Controllers']);
+    
 });

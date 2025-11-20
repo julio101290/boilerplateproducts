@@ -329,6 +329,7 @@
 
         var idProduct = $(this).attr("data-id");
 
+        window.open("<?= base_url('admin/products/barcode') ?>" + "/" + idProduct, "_blank");
 
 
     });
@@ -336,9 +337,9 @@
     $(".tableProducts").on("click", ".btnEditExtra", function () {
 
         var idProduct = $(this).attr("idproducts");
-        
-        console.log("idProduc:",idProduct);
-        
+
+        console.log("idProduc:", idProduct);
+
         var datos = new FormData();
         datos.append("idProduct", idProduct);
 
@@ -351,7 +352,7 @@
             contentType: false,
             processData: false,
             success: function (respuesta) {
-               
+
                 $(".extraFields").html(respuesta);
 
             }
