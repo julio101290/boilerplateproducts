@@ -170,6 +170,40 @@ class ProductsController extends BaseController {
         return \Hermawan\DataTables\DataTable::of($datos)->toJson(true);
     }
 
+    public function getAllProductsInventoryAjaxSelect2($empresa) {
+
+
+        helper('auth');
+
+        $idUser = user()->id;
+        $titulos["empresas"] = $this->empresa->mdlEmpresasPorUsuario($idUser);
+
+        if (count($titulos["empresas"]) == "0") {
+
+            $empresasID[0] = "0";
+        } else {
+
+            $empresasID = array_column($titulos["empresas"], "id");
+        }
+
+
+        $productsInventory = $this->products->mdlProductosEmpresaInventarioSalida($empresasID, $empresa);
+
+        $data = array();
+
+        foreach ($productsInventory as $products => $value) {
+
+            $data[] = array(
+                "id" => $value->id(),
+                "text" => $value->id() . ' ' . $value->texto(),
+            );
+        }
+
+        $response['data'] = $data;
+
+        return $this->response->setJSON($response);
+    }
+
     /**
      * Get Unidad SAT via AJax
      */
@@ -285,39 +319,41 @@ class ProductsController extends BaseController {
         $products = new ProductsModel();
         $idEmpresa = $postData['idEmpresa'];
 
-        if (!isset($postData['searchTerm'])) {
-            // Fetch record
+        helper('auth');
 
-            $listProducts = $products->select('id,code,description')->where("deleted_at", null)
-                    ->where('idEmpresa', $idEmpresa)
-                    ->orderBy('id')
-                    ->orderBy('code')
-                    ->orderBy('description')
-                    ->findAll(1000);
+        $idUser = user()->id;
+        $titulos["empresas"] = $this->empresa->mdlEmpresasPorUsuario($idUser);
+
+        if (count($titulos["empresas"]) == "0") {
+
+            $empresasID[0] = "0";
         } else {
-            $searchTerm = $postData['searchTerm'];
 
-            // Fetch record
-
-            $listProducts = $products->select('id,code,description')->where("deleted_at", null)
-                    ->where('idEmpresa', $idEmpresa)
-                    ->groupStart()
-                    ->like('description', $searchTerm)
-                    ->orLike('id', $searchTerm)
-                    ->orLike('code', $searchTerm)
-                    ->groupEnd()
-                    ->findAll(1000);
+            $empresasID = array_column($titulos["empresas"], "id");
         }
 
+        if (!isset($postData['searchTerm'])) {
+
+            $postData['searchTerm'] = "";
+        }
+
+
+        // Fetch record
+
+        $listProducts = $products->mdlProductosEmpresSelectAjax($empresasID,$idEmpresa,0,25,$postData['searchTerm']);
+
         $data = array();
+        /*
         $data[] = array(
             "id" => 0,
             "text" => "0 Todos Los Productos",
         );
+         * 
+         */
         foreach ($listProducts as $product) {
             $data[] = array(
                 "id" => $product['id'],
-                "text" => $product['id'] . ' ' . $product['id'] . ' ' . $product['code'] . ' ' . $product['description'],
+                "text" =>  $product['id'] . ' ' . $product['lote'] . ' ' . $product['description'],
             );
         }
 
@@ -646,8 +682,7 @@ class ProductsController extends BaseController {
                         ->whereIn("idEmpresa", $empresasID)
                         ->where("id", $idProducto)->findAll();
 
-        $pdf->AddPage('L',array(101, 50));
-
+        $pdf->AddPage('L', array(101, 50));
 
         $pdf->write1DBarcode($productos[0]["barcode"], 'C39', '', '', '', 18, 0.4, $style, 'N');
 
