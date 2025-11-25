@@ -446,6 +446,7 @@
         var inventarioRiguroso = $("#inventarioRiguroso").is(':checked') ? "on" : "off";
         var tasaExcenta = $("#tasaExcenta").is(':checked') ? "on" : "off";
         var inmuebleOcupado = $("#inmuebleOcupado").is(':checked') ? "on" : "off";
+        var calculatelot = $("#calculatelot").is(':checked') ? "on" : "off";
 
         // Validaciones del formulario
         if (!idEmpresa) {
@@ -520,6 +521,7 @@
         datos.append("inmuebleOcupado", inmuebleOcupado);
         datos.append("tasaExcenta", tasaExcenta);
         datos.append("predial", predial);
+        datos.append("calculatelot", calculatelot);
 
         // enviar routeImage si existe (ruta previa)
         if (typeof routeImage !== 'undefined') {

@@ -385,7 +385,8 @@ class ProductsController extends BaseController {
 
         //GET SUB CATEGORY
 
-        if ($datosProducts->idSubCategoria == null) {
+        if ($datosProducts->idSubCategoria == null || 
+                $datosProducts->idSubCategoria == 0) {
 
             $datosProducts->descriptionSubCategory = "Sin SubCategoria";
         } else {

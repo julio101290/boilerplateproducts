@@ -40,6 +40,7 @@ class ProductsModel extends Model {
         , 'inmuebleOcupado'
         , 'tasaExcenta'
         , 'predial'
+        , 'calculatelot'
     ];
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
@@ -84,7 +85,9 @@ class ProductsModel extends Model {
                         a.claveProductoSAT AS claveProductoSAT,
                         a.inmuebleOcupado AS inmuebleOcupado,
                         a.tasaExcenta AS tasaExcenta,
-                        a.predial AS predial'
+                        a.predial AS predial,
+                        a.calculatelot as calculatelot
+                        '
                 )
                 ->join('empresas b', 'a.idEmpresa = b.id')
                 ->whereIn('a.idEmpresa', $empresas)
@@ -133,6 +136,7 @@ class ProductsModel extends Model {
                         'a.claveProductoSAT AS claveProductoSAT,' .
                         'a.tasaExcenta AS tasaExcenta,' .
                         'a.predial AS predial,' .
+                        'a.calculatelot AS calculatelot,' .
                         'a.inmuebleOcupado AS inmuebleOcupado'
                 )
                 ->where('a.idEmpresa', $empresa)
@@ -178,6 +182,7 @@ class ProductsModel extends Model {
                         'a.claveProductoSAT AS claveProductoSAT,' .
                         'a.tasaExcenta AS tasaExcenta,' .
                         'a.predial AS predial,' .
+                        'a.calculatelot AS calculatelot,' .
                         'a.inmuebleOcupado AS inmuebleOcupado'
                 )
                 ->where('c.cantidad >', 0)
@@ -265,6 +270,7 @@ class ProductsModel extends Model {
                         'a.claveProductoSAT AS claveProductoSAT,' .
                         'a.tasaExcenta AS tasaExcenta,' .
                         'a.predial AS predial,' .
+                        'a.calculatelot AS calculatelot,' .
                         'a.inmuebleOcupado AS inmuebleOcupado'
                 )
                 ->where('a.idEmpresa', $empresa)
@@ -310,6 +316,7 @@ class ProductsModel extends Model {
                         'a.claveProductoSAT AS claveProductoSAT,' .
                         'a.tasaExcenta AS tasaExcenta,' .
                         'a.predial AS predial,' .
+                        'a.calculatelot AS calculatelot,' .
                         'a.inmuebleOcupado AS inmuebleOcupado'
                 )
                 ->where('c.cantidad >', 0)
@@ -390,6 +397,7 @@ class ProductsModel extends Model {
             a.inmuebleOcupado,
             a.tasaExcenta,
             a.predial,
+            a.calculatelot,
             a.claveProductoSAT
         ')
                         ->join('empresas b', 'a.idEmpresa = b.id')
@@ -432,6 +440,7 @@ class ProductsModel extends Model {
             a.inmuebleOcupado,
             a.tasaExcenta,
             a.predial,
+            a.calculatelot,
             a.claveProductoSAT
         ')
                         ->join('empresas b', 'a.idEmpresa = b.id')
@@ -478,6 +487,7 @@ class ProductsModel extends Model {
                         a.inmuebleOcupado AS inmuebleOcupado,
                         a.tasaExcenta AS tasaExcenta,
                         a.predial AS predial,
+                        a.calculatelot AS calculatelot,
                         a.claveProductoSAT AS claveProductoSAT'
                 )
                 ->join('empresas b', 'a.idEmpresa = b.id')

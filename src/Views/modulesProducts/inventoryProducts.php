@@ -31,6 +31,20 @@
 
 <div class="form-group row">
     <label for="stock" class="col-sm-2 col-form-label">
+        Calcula Lote
+    </label>
+    <div class="col-sm-10">
+        <div class="input-group">
+            <div class="input-group-prepend">
+
+            </div>
+            <input type="checkbox" id="inventarioRiguroso" name="calculatelot" class="calculatelot" data-width="250" data-height="40" checked data-toggle="toggle" data-on="Calcula Lote" data-off="Lote Manual" data-onstyle="success" data-offstyle="danger">
+        </div>
+    </div>
+</div>
+
+<div class="form-group row">
+    <label for="stock" class="col-sm-2 col-form-label">
         Inventario Riguroso
     </label>
     <div class="col-sm-10">

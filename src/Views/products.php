@@ -298,6 +298,7 @@
                 $("#inventarioRiguroso").bootstrapToggle(respuesta["inventarioRiguroso"]);
                 $("#inmuebleOcupado").bootstrapToggle(respuesta["inmuebleOcupado"]);
                 $("#tasaExcenta").bootstrapToggle(respuesta["tasaExcenta"]);
+                $("#calculatelot").bootstrapToggle(respuesta["calculatelot"]);
 
 
                 $("#predial").val(respuesta["predial"]);
