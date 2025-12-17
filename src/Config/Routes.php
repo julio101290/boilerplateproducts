@@ -127,5 +127,14 @@ $routes->group('admin', function ($routes) {
     $routes->get('product/usuariosPorProducto/(:any)'
             , 'ProductsUsersController::getProductsByUserAjax/$1'
             , ['namespace' => 'julio101290\boilerplateproducts\Controllers']);
-    
+
+    $routes->get('fieldsExtraProductos/(:any)/(:any)/(:any)'
+            , 'FieldsExtraProductosController::sellsListFilters/$1/$2/$3'
+            , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
+    );
+
+    $routes->post('fieldsExtraProductos/saveClonar'
+            , 'FieldsExtraProductosController::saveClonar'
+            , ['namespace' => 'julio101290\boilerplateproducts\Controllers']
+    );
 });

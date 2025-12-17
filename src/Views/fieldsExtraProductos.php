@@ -4,8 +4,65 @@
 <?= $this->extend('julio101290\boilerplate\Views\layout\index') ?>
 <?= $this->section('content') ?>
 <?= $this->include('julio101290\boilerplateproducts\Views\modulesFieldsExtraProductos/modalCaptureFieldsExtraProductos') ?>
+<?= $this->include('julio101290\boilerplateproducts\Views\modulesFieldsExtraProductos/modalClonarFieldsExtraProductos') ?>
 <div class="card card-default">
     <div class="card-header">
+        <div class="float-left">
+
+            <div class="btn-group">
+
+                <div class="form-group">
+                    <label for="idEmpresaList">Empresa </label>
+                    <select class="form-control idEmpresaList" name="idEmpresaList" id="idEmpresaList" style = "width:80%;">
+                        <option value="0">Seleccione empresa</option>
+                        <?php
+                        foreach ($empresas as $key => $value) {
+
+                            echo "<option value='$value[id]' selected>$value[id] - $value[nombre] </option>  ";
+                        }
+                        ?>
+
+                    </select>
+                </div>
+
+            </div>
+
+
+            <div class="btn-group">
+
+                <div class="form-group">
+                    <label for="idCategoryList"><?= lang('fieldsExtraProductos.fields.idCategory') ?></label>
+                    <select name="idCategoryList" id="idCategoryList" style="width: 90%;" class="form-control idCategoryList form-controlProducts">
+                        <option value="0" selected>
+                            <?= lang('products.fields.idSelectCategory') ?>
+                        </option>
+
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="btn-group">
+                <div class="form-group">
+                    <label for="idSubCategoryList"><?= lang('fieldsExtraProductos.fields.idSubCategory') ?></label>
+
+                    <select name="idSubCategoryList" id="idSubCategoryList" style="width: 90%;" class="form-control idSubCategoryList form-controlProducts">
+                        <option value="0" selected>
+                            <?= lang('products.fields.idSelectSubCategory') ?>
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group" style="margin-right:10px;">
+                <button type="button" class="btn btn-success btnAceptar" id="btnAceptar" name="btnAceptar"><i class="fa fa-check"></i></button>
+            </div>
+            <div class="btn-group">
+ 
+                 <button type="button" class="btn btn-primary btnClonarFieldsExtraProductos" data-toggle="modal" data-target="#modalClonarFieldsExtraProductos"><i class="fa fa-copy "></i>  Clonar</button>
+            </div>
+
+        </div>
         <div class="float-right">
             <div class="btn-group">
                 <button class="btn btn-primary btnAddFieldsExtraProductos" data-toggle="modal" data-target="#modalAddFieldsExtraProductos">
@@ -44,6 +101,22 @@
 <?= $this->endSection() ?>
 <?= $this->section('js') ?>
 <script>
+    $(".btnAceptar").on("click", function () {
+        //RESETEAR EL COLAPSO DE LA TABLA
+        collapsedGroups = {};
+        ttop = '';
+        fncAceptar();
+        
+    })
+    function fncAceptar() {
+        var idEmpresa = $('#idEmpresaList').val();
+        var idCategoria = $('#idCategoryList').val();
+        var idSubCategoria = $('#idSubCategoryList').val();
+        console.log("dneajfn");
+      
+        
+        tableFieldsExtraProductos.ajax.url(`<?= base_url('admin/fieldsExtraProductos') ?>/` + idEmpresa + '/' + idCategoria + '/' + idSubCategoria).load();
+   }
     var tableFieldsExtraProductos = $('#tableFieldsExtraProductos').DataTable({
         processing: true,
         serverSide: true,
@@ -138,6 +211,8 @@
         });
     });
 
+    
+    
     $(".tableFieldsExtraProductos").on("click", ".btnEditFieldsExtraProductos", function () {
         var idFieldsExtraProductos = $(this).attr("idFieldsExtraProductos");
         var datos = new FormData();
@@ -190,7 +265,7 @@
 
 
                 var value = respuesta["type"];
-              
+
 
                 if (value == 2) {
 
@@ -237,8 +312,117 @@
         });
     });
 
+    /**
+     * Categorias por empresa
+     */
+
+    $(".idCategoryList").select2({
+        ajax: {
+            url: "<?= base_url('admin/categorias/getCategoriasAjax') ?>",
+            type: "post",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                // CSRF Hash
+                var csrfName = $('.txt_csrfname').attr('name'); // CSRF Token name
+                var csrfHash = $('.txt_csrfname').val(); // CSRF hash
+                var idEmpresa = $('.idEmpresaList').val(); // CSRF hash
+
+                return {
+                    searchTerm: params.term, // search term
+                    [csrfName]: csrfHash, // CSRF Token
+                    idEmpresa: idEmpresa // search term
+                };
+            },
+            processResults: function (response) {
+
+                // Update CSRF Token
+                $('.txt_csrfname').val(response.token);
+
+                return {
+                    results: response.data
+                };
+            },
+            cache: true
+        }
+    });
+
+    $(".idSubCategoryList").select2({
+        ajax: {
+            url: "<?= base_url('admin/subCategorias/getSubCategoriasAjax') ?>",
+            type: "post",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                // CSRF Hash
+                var csrfName = $('.txt_csrfname').attr('name'); // CSRF Token name
+                var csrfHash = $('.txt_csrfname').val(); // CSRF hash
+                var idEmpresa = $('.idEmpresaList').val(); // CSRF hash
+                var idCategoria = $('.idCategoryList').val(); // CSRF hash
+
+                return {
+                    searchTerm: params.term, // search term
+                    [csrfName]: csrfHash, // CSRF Token
+                    idEmpresa: idEmpresa, // search term
+                    idCategoria: idCategoria // category
+                };
+            },
+            processResults: function (response) {
+
+                // Update CSRF Token
+                $('.txt_csrfname').val(response.token);
+
+                return {
+                    results: response.data
+                };
+            },
+            cache: true
+        }
+    });
+
+    $("#idEmpresaList").select2();
+    $(".type").on("change", function () {
+
+        var value = $(this).val();
+        console.log(value);
+
+        if (value == 2) {
+
+            $(".classOptions").show();     // lo muestra
+
+        } else {
+
+            $(".classOptions").hide();     // lo oculta
+
+        }
+
+    });
     $(function () {
         $("#modalAddFieldsExtraProductos").draggable();
     });
+    
+    $(".idEmpresaList").change(function () {
+        $("#idCategoryList").val("0").trigger("change.select2");
+    });
+     $(".idCategoryList").change(function () {
+        $("#idSubCategoryList").val("0").trigger("change.select2");
+    });
+    
+    $(".btnClonarFieldsExtraProductos").on("click", function () {
+        
+        console.log("aaa");
+//        var tipo = $('#rTipoObraTMP').val();
+//
+//        if (tipo == 'rArea') {
+        $('#inputEmpresa').val($('#idEmpresaList').val());
+//            $('.ctrArea #input2').val($('#area').val());
+//            console.log(tipo);
+//        } else {
+//            $('#input1').val($('#prototipo').val());
+//            $('#input2').val($('#version').val());
+//        }
+//        $('#input3').val($('#etapa').val());
+//        $('#input4').val($('#concepto').val());
+    })
 </script>
 <?= $this->endSection() ?>

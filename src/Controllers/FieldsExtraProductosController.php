@@ -3,15 +3,17 @@
 namespace julio101290\boilerplateproducts\Controllers;
 
 use App\Controllers\BaseController;
-use julio101290\boilerplateproducts\Models\{FieldsExtraProductosModel};
+use julio101290\boilerplateproducts\Models\{
+    FieldsExtraProductosModel
+};
 use CodeIgniter\API\ResponseTrait;
 use julio101290\boilerplatelog\Models\LogModel;
 use julio101290\boilerplatecompanies\Models\EmpresasModel;
 use julio101290\boilerplateproducts\Models\CategoriasModel;
 use julio101290\boilerplateproducts\Models\SubcategoriasModel;
 
-class FieldsExtraProductosController extends BaseController
-{
+class FieldsExtraProductosController extends BaseController {
+
     use ResponseTrait;
 
     protected $log;
@@ -20,19 +22,17 @@ class FieldsExtraProductosController extends BaseController
     protected $category;
     protected $subCategory;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->fieldsExtraProductos = new FieldsExtraProductosModel();
         $this->log = new LogModel();
         $this->empresa = new EmpresasModel();
         $this->category = new CategoriasModel();
         $this->subCategory = new SubcategoriasModel();
-    
+
         helper(['menu', 'utilerias']);
     }
 
-    public function index()
-    {
+    public function index() {
         helper('auth');
 
         $idUser = user()->id;
@@ -69,14 +69,14 @@ class FieldsExtraProductosController extends BaseController
             $recordsFiltered = $filteredBuilder->countAllResults(false);
 
             $data = $builder->orderBy("a." . $orderField, $orderDir)
-                             ->get($length, $start)
-                             ->getResultArray();
+                    ->get($length, $start)
+                    ->getResultArray();
 
             return $this->response->setJSON([
-                'draw' => $draw,
-                'recordsTotal' => $recordsTotal,
-                'recordsFiltered' => $recordsFiltered,
-                'data' => $data,
+                        'draw' => $draw,
+                        'recordsTotal' => $recordsTotal,
+                        'recordsFiltered' => $recordsFiltered,
+                        'data' => $data,
             ]);
         }
 
@@ -85,8 +85,58 @@ class FieldsExtraProductosController extends BaseController
         return view('julio101290\boilerplateproducts\Views\fieldsExtraProductos', $titulos);
     }
 
-    public function getFieldsExtraProductos()
-    {
+    //obtener los registros por filtros
+    public function sellsListFilters($idEmpresa, $idCategoria, $idSubCategoria) {
+
+        helper('auth');
+        $idUser = user()->id;
+        $titulos["empresas"] = $this->empresa->mdlEmpresasPorUsuario($idUser);
+        $empresasID = count($titulos["empresas"]) === 0 ? [0] : array_column($titulos["empresas"], "id");
+
+        $request = service('request');
+        $draw = (int) $request->getGet('draw');
+        $start = (int) $request->getGet('start');
+        $length = (int) $request->getGet('length');
+        $searchValue = $request->getGet('search')['value'] ?? '';
+        $orderColumnIndex = (int) $request->getGet('order')[0]['column'] ?? 0;
+        $orderDir = $request->getGet('order')[0]['dir'] ?? 'asc';
+
+        $fields = $this->fieldsExtraProductos->allowedFields;
+        $orderField = $fields[$orderColumnIndex] ?? 'id';
+
+        $builder = $this->fieldsExtraProductos->mdlGetFieldsExtraProductosFilters($idEmpresa, $idCategoria, $idSubCategoria);
+
+        $total = clone $builder;
+        $recordsTotal = $total->countAllResults(false);
+
+        if (!empty($searchValue)) {
+            $builder->groupStart();
+            foreach ($fields as $field) {
+                $builder->orLike("a." . $field, $searchValue);
+            }
+            $builder->groupEnd();
+        }
+
+        $filteredBuilder = clone $builder;
+        $recordsFiltered = $filteredBuilder->countAllResults(false);
+
+        $data = $builder->orderBy("a." . $orderField, $orderDir)
+                ->get($length, $start)
+                ->getResultArray();
+
+        return $this->response->setJSON([
+                    'draw' => $draw,
+                    'recordsTotal' => $recordsTotal,
+                    'recordsFiltered' => $recordsFiltered,
+                    'data' => $data,
+        ]);
+
+        $titulos["title"] = lang('fieldsExtraProductos.title');
+        $titulos["subtitle"] = lang('fieldsExtraProductos.subtitle');
+        return view('julio101290\boilerplateproducts\Views\fieldsExtraProductos', $titulos);
+    }
+
+    public function getFieldsExtraProductos() {
         helper('auth');
 
         $idUser = user()->id;
@@ -95,30 +145,29 @@ class FieldsExtraProductosController extends BaseController
 
         $idFieldsExtraProductos = $this->request->getPost("idFieldsExtraProductos");
         $dato = $this->fieldsExtraProductos->whereIn('idEmpresa', $empresasID)
-                                   ->where('id', $idFieldsExtraProductos)
-                                   ->first();
-        
+                ->where('id', $idFieldsExtraProductos)
+                ->first();
+
         //GET DATA CATEGORY
         $dataCategory = $this->category
-                             ->select("descripcion")
-                             ->where("id",$dato["idCategory"])
-                             ->first();
-        
+                ->select("descripcion")
+                ->where("id", $dato["idCategory"])
+                ->first();
+
         //GET DATA SUB CATEGORY
-        
+
         $dataSubCategory = $this->subCategory
-                                ->select("descripcion")
-                                ->where("id",$dato["idSubCategory"])    
-                                ->first();
-        
+                ->select("descripcion")
+                ->where("id", $dato["idSubCategory"])
+                ->first();
+
         $dato["descripcionCategoria"] = $dataCategory["descripcion"];
         $dato["descripcionSubCategoria"] = $dataSubCategory["descripcion"];
 
         return $this->response->setJSON($dato);
     }
 
-    public function save()
-    {
+    public function save() {
         helper('auth');
 
         $userName = user()->username;
@@ -152,8 +201,33 @@ class FieldsExtraProductosController extends BaseController
         }
     }
 
-    public function delete($id)
-    {
+    public function saveClonar() {
+        helper('auth');
+
+        $userName = user()->username;
+        $datos = $this->request->getPost();
+        $idKey = $datos["idFieldsExtraProductos"] ?? 0;
+
+        $dataExistente = $this->fieldsExtraProductos
+                ->where("idCategory", $datos["idCategoryNew"])
+                ->where("idSubCategory", $datos["idSubCategoryNew"])
+                ->where("idEmpresa", $datos["idEmpresaClonar"])
+                ->countAllResults();
+
+        if ($dataExistente > 0) {
+
+            return $this->respond(['status' => 500, 'message' => 'Ya existen registros repetidos '], 500);
+        }
+
+        try {
+            $builder = $this->fieldsExtraProductos->mdlSaveClonar($datos);
+            return $this->respond(['status' => 201, 'message' => 'Guardado correctamente'], 201);
+        } catch (Exception $ex) {
+            return $this->respond(['status' => 500, 'message' => 'Error al guardar: ' . $ex->getMessage()], 500);
+        }
+    }
+
+    public function delete($id) {
         helper('auth');
 
         $userName = user()->username;
