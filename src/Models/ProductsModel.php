@@ -230,7 +230,7 @@ class ProductsModel extends Model {
         ];
     }
 
-    public function mdlProductosEmpresSelectAjax($empresas, $empresa, int $start = 0, int $length, string $search = ''): array {
+    public function mdlProductosEmpresSelectAjax(array $empresas = [], $empresa=0, int $start = 0, int $length =0, string $search = ''): array {
         // Condición para inventario NULL en PostgreSQL vs MySQL
         $driver = $this->db->DBDriver;
         $isNull = $driver === 'Postgre' ? '"a"."inventarioRiguroso" IS NULL' : 'a.inventarioRiguroso IS NULL';
