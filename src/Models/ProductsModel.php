@@ -50,6 +50,10 @@ class ProductsModel extends Model {
         'buyPrice' => 'numeric',
         'salePrice' => 'numeric',
         'stock' => 'numeric',
+        'description' => 'required|min_length[3]',
+        'idEmpresa' => 'required|integer|greater_than[0]',
+        'idCategory' => 'required|integer|greater_than[0]',
+        'idSubCategoria' => 'required|integer|greater_than[0]',
     ];
     protected $validationMessages = [];
     protected $skipValidation = false;
