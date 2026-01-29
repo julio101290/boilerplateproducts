@@ -242,6 +242,12 @@
         }
     });
 
+    $("#idEmpresa").change(function () {
+        $('.idCategory').val("0").trigger('change');
+    })
+    $("#idCategory").change(function () {
+        $('.idSubCategoria').val("0").trigger('change');
+    })
     /**
      * Categorias por empresa
      */
@@ -356,13 +362,17 @@
         $("#idCategory").val("0");
 
         $("#idCategory").trigger("change");
+        
+        $("#idSubCategoria").val("0");
+
+        $("#idSubCategoria").trigger("change");
 
         $("#idEmpresa").val("0");
 
         $("#idEmpresa").trigger("change");
 
         $("#porcentSale").val("40");
-        $("#porcentTax").val("0");
+        $("#porcentTax").val(0);
 
         $("#porcentIVARetenido").val("0");
         $("#porcentISRRetenido").val("0");
@@ -416,9 +426,11 @@
 
         // Campos
         var idEmpresa = $("#idEmpresa").val();
+        console.log("idempresa", idEmpresa);
         var idProducts = $("#idProducts").val();
         var clave = $("#code").val();
         var idCategory = $("#idCategory").val();
+        console.log("dicategoria", idCategory);
         var idSubCategory = $("#idSubCategoria").val();
         var barcode = $("#barcode").val();
         var description = $("#description").val();
@@ -449,18 +461,24 @@
         var calculatelot = $("#calculatelot").is(':checked') ? "on" : "off";
 
         // Validaciones del formulario
-        if (!idEmpresa) {
+        if (!idEmpresa || idEmpresa == 0) {
             Toast.fire({icon: 'error', title: "Tiene que seleccionar la empresa"});
             $btn.removeAttr("disabled");
             return;
         }
 
-        if (!idCategory) {
+        if (!idCategory || idCategory == 0) {
             Toast.fire({icon: 'error', title: "Tiene que seleccionar la categoria"});
             $btn.removeAttr("disabled");
             return;
         }
-
+        
+        if (!idSubCategory || idSubCategory == 0) {
+            Toast.fire({icon: 'error', title: "Tiene que seleccionar la subcategoria"});
+            $btn.removeAttr("disabled");
+            return;
+        }
+        
         if (!porcentTax && porcentTax !== "0") {
             Toast.fire({icon: 'error', title: "Tiene que ingregar el porcentaje de impuesto"});
             $btn.removeAttr("disabled");
