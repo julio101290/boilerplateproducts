@@ -21,10 +21,10 @@ class FieldsExtraProductos extends Migration {
             'deleted_at' => ['type' => 'datetime', 'null' => true],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('fieldsExtraProductos', true);
+        $this->forge->createTable('fieldsextraproductos', true);
     }
 
     public function down() {
-        $this->forge->dropTable('fieldsExtraProductos', true);
+        $this->forge->dropTable('fieldsextraproductos', true);
     }
 }
