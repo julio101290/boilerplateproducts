@@ -21,6 +21,10 @@ use Hermawan\DataTables\DataTable;
 //use App\Models\SellsDetailsModel;
 //use App\Models\Tipos_movimientos_inventarioModel;
 
+/**
+ * 
+ */
+
 class ProductsController extends BaseController {
 
     use ResponseTrait;
